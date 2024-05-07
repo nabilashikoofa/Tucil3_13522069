@@ -9,23 +9,35 @@ public class WordLadderSolver {
     private final WordLadderSearch wordLadderSearch;
     private static final String DICTIONARY_FILE = "dictionary.txt";
 
+    public WordLadderSolver(WordLadderSearch wordLadderSearch) {
+        this.wordLadderSearch = wordLadderSearch;
+    }
+
     public static void runWordLadderSolver() {
         try (Scanner scanner = new Scanner(System.in)) {
-            List<String> dictionary = loadDictionary(DICTIONARY_FILE);
-            WordValidator wordValidator = new WordValidator(dictionary, scanner);
-
-            String startWord = wordValidator.getValidStartWord();
-            String endWord = wordValidator.getValidEndWord(startWord);
-
-            int choice = selectAlgorithm(scanner);
-
-            if (choice == 4) {
-                compareAllAlgorithms(startWord, endWord);
-            } else {
-                WordLadderSearch wordLadderSearch = createAlgorithm(choice);
-                WordLadderSolver solver = new WordLadderSolver(wordLadderSearch);
-                solver.solve(startWord, endWord);
-            }
+            boolean exit = false;
+            
+            do {
+                List<String> dictionary = loadDictionary(DICTIONARY_FILE);
+                WordValidator wordValidator = new WordValidator(dictionary, scanner);
+    
+                String startWord = wordValidator.getValidStartWord();
+                String endWord = wordValidator.getValidEndWord(startWord);
+    
+                int choice = selectAlgorithm(scanner);
+    
+                if (choice == 4) {
+                    compareAllAlgorithms(startWord, endWord);
+                } else {
+                    WordLadderSearch wordLadderSearch = createAlgorithm(choice);
+                    WordLadderSolver solver = new WordLadderSolver(wordLadderSearch);
+                    solver.solve(startWord, endWord);
+                }
+                
+                System.out.print("Do you want to find another word ladder? (yes/no): ");
+                String input = scanner.nextLine().toLowerCase();
+                exit = !input.equals("yes");
+            } while (!exit);
         } catch (Exception e) {
             System.out.println("An unexpected error occurred: " + e.getMessage());
             e.printStackTrace();
@@ -101,10 +113,6 @@ public class WordLadderSolver {
             e.printStackTrace();
         }
         return dictionary;
-    }
-
-    public WordLadderSolver(WordLadderSearch wordLadderSearch) {
-        this.wordLadderSearch = wordLadderSearch;
     }
 
     public void solve(String startWord, String endWord) {
