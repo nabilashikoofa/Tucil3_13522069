@@ -1,0 +1,6 @@
+home -> work
+knit -> yarn
+flown -> spits
+paint -> brush
+mitts -> scarf
+ladder -> laders
